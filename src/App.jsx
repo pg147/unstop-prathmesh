@@ -1,6 +1,6 @@
 
 export default function App() {
   return (
-    <div>Hi !</div>
+    <div className="font-poppins">Hi this is poppins !</div>
   )
 }
