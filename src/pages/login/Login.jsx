@@ -1,6 +1,9 @@
+// React imports
+import { useState } from "react"
+
 // Important Imports
 import axios from "axios";
-import { useState } from "react"
+import Cookies from "js-cookie";
 
 // Imported from Hero Icons
 import { HiLockClosed, HiMail } from "react-icons/hi"
@@ -31,6 +34,7 @@ export default function Login() {
   });
 
   const login = async () => {
+    
     // User Credentials
     const user = {
       userName : userDetails.userName,
@@ -38,10 +42,18 @@ export default function Login() {
       password : userDetails.password,
       rememberMe : userDetails.rememberMe
     }
-
+    
+    const token = Cookies.set("user_token", user.userName, { expires : 7 });
+    
     try {
-      const response = await axios.post(apiUrl, user, { headers : { Authorization : user.password }});
+      const response = await axios.post(apiUrl, user, { headers : { Authorization : `Bearer ${token}` }});
       const responseData = response.data;
+
+      if (responseData && responseData.success) {
+        window.localStorage.setItem("user", responseData);
+      } else {
+        throw new Error("Error setting user credentials.");
+      }
 
       console.log(responseData);
     } catch (error) {
