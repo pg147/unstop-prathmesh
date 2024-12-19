@@ -1,6 +1,8 @@
-// Imported from Hero Icons
+// Important Imports
 import axios from "axios";
 import { useState } from "react"
+
+// Imported from Hero Icons
 import { HiLockClosed, HiMail } from "react-icons/hi"
 import { HiUser } from "react-icons/hi2"
 
