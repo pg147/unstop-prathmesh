@@ -1,6 +1,11 @@
 // Imported from Hero Icons
+import axios from "axios";
+import { useState } from "react"
 import { HiLockClosed, HiMail } from "react-icons/hi"
 import { HiUser } from "react-icons/hi2"
+
+// API URL 
+const apiUrl = import.meta.env.API_URL;
 
 // Array for Auth options
 const auths = [
@@ -15,6 +20,33 @@ const auths = [
 ]
 
 export default function Login() {
+  const [isRememberMe, setIsRememberMe] = useState(false);
+  const [userDetails, setUserDetails] = useState({
+    userName : "",
+    email : "",
+    password : "",
+    rememberMe : isRememberMe
+  });
+
+  const login = async () => {
+    // User Credentials
+    const user = {
+      userName : userDetails.userName,
+      email : userDetails.email,
+      password : userDetails.password,
+      rememberMe : userDetails.rememberMe
+    }
+
+    try {
+      const response = await axios.post(apiUrl, user, { headers : { Authorization : user.password }});
+      const responseData = response.data;
+
+      console.log(responseData);
+    } catch (error) {
+      console.log("Error : ", error);
+    }
+  }
+
   return (
     <div className="flex h-screen w-full bg-outline">
       <div className="w-full xl:px-12 2xl:px-36 lg:flex items-center justify-around lg:mx-auto">
@@ -62,6 +94,7 @@ export default function Login() {
             <div className="relative">
               <input
                 type="text"
+                onChange={(event) => [...userDetails, setUserDetails({ userName : event.target.value })]}
                 placeholder="Your username"
                 className="w-full px-14 py-4 bg-fields focus:outline-primary rounded-[16px]"
               />
@@ -73,6 +106,7 @@ export default function Login() {
             <div className="relative">
               <input
                 type="email"
+                onChange={(event) => [...userDetails, setUserDetails({ email : event.target.value })]}
                 placeholder="Your email"
                 className="w-full px-14 py-4 bg-fields focus:outline-primary rounded-[16px]"
               />
@@ -84,6 +118,7 @@ export default function Login() {
             <div className="relative">
               <input
                 type="password"
+                onChange={(event) => [...userDetails, setUserDetails({ password : event.target.value })]}
                 placeholder="Enter password"
                 className="w-full px-14 py-4 bg-fields focus:outline-primary rounded-[16px]"
               />
@@ -98,6 +133,7 @@ export default function Login() {
                   type="checkbox"
                   name="rememberMe"
                   id="remember-me"
+                  onChange={() => setIsRememberMe(!isRememberMe)}
                   className="h-4 w-4 rounded-md checked:bg-primary"
                 />
                 <h1>Remember me</h1>
@@ -108,6 +144,7 @@ export default function Login() {
             {/* Login Button */}
             <button
               type="submit"
+              onClick={login}
               className="mt-6 p-4 rounded-[16px] bg-primary hover:bg-primary/90 transition-all duration-300 ease-in-out text-white"
             >
               Login
