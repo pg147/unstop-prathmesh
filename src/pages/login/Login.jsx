@@ -24,6 +24,11 @@ const auths = [
 ]
 
 export default function Login() {
+  // Checking if User exists in Local Storage
+  if (localStorage.getItem("user")) {
+    window.location.href = '/';
+  }
+
   const [isRememberMe, setIsRememberMe] = useState(false);
   const [userDetails, setUserDetails] = useState({
     username: "",
@@ -156,7 +161,7 @@ export default function Login() {
                 <HiUser className="absolute inset-0 my-auto mx-5 h-6 w-6" />
               </div>
               {/* Validation Statement */}
-              {errors.username && <div className=" text-red-700 text-sm my-2">
+              {errors.username && <div className="text-red-700 text-sm my-2">
                 <p>{errors.username}</p>
               </div>}
             </div>
@@ -174,7 +179,7 @@ export default function Login() {
                 <HiMail className="absolute inset-0 my-auto mx-5 h-6 w-6" />
               </div>
               {/* Validation Statement */}
-              {errors.email && <div className=" text-red-700 text-sm my-2">
+              {errors.email && <div className="text-red-700 text-sm my-2">
                 <p>{errors.email}</p>
               </div>}
             </div>
@@ -192,7 +197,7 @@ export default function Login() {
                 <HiLockClosed className="absolute inset-0 my-auto mx-5 h-6 w-6" />
               </div>
               {/* Validation Statement */}
-              {errors.password && <div className=" text-red-700 text-sm mt-2">
+              {errors.password && <div className="text-red-700 text-sm mt-2">
                 <p>{errors.password}</p>
               </div>}
             </div>
