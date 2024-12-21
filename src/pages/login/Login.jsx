@@ -3,14 +3,13 @@ import { useState } from "react"
 
 // Important Imports
 import axios from "axios";
-import Cookies from "js-cookie";
 
 // Imported from Hero Icons
 import { HiLockClosed, HiMail } from "react-icons/hi"
 import { HiUser } from "react-icons/hi2"
 
 // API URL 
-const apiUrl = import.meta.env.API_URL;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 // Array for Auth options
 const auths = [
@@ -27,26 +26,54 @@ const auths = [
 export default function Login() {
   const [isRememberMe, setIsRememberMe] = useState(false);
   const [userDetails, setUserDetails] = useState({
-    userName : "",
-    email : "",
-    password : "",
-    rememberMe : isRememberMe
+    username: "",
+    email: "",
+    password: "",
+    rememberMe: isRememberMe
   });
 
+  const [errors, setErrors] = useState({
+    username: "",
+    email: "",
+    password: ""
+  });
+
+  const validate = () => {
+    const newErrors = {};
+
+    // Username Validation
+    if (userDetails.username !== "emilys") {
+      newErrors.username = "Your username must be emilys!";
+    };
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(userDetails.email)) {
+      newErrors.email = "Invalid email format.";
+    }
+
+    // Password Validation
+    if (userDetails.password.length < 8) {
+      newErrors.password = "Your password length must be equal to or greater than 8";
+    }
+
+    setErrors(newErrors);
+
+    return newErrors.length === 0 ? true : false;
+  }
+
   const login = async () => {
-    
+    if (!validate()) return;
+
     // User Credentials
     const user = {
-      userName : userDetails.userName,
-      email : userDetails.email,
-      password : userDetails.password,
-      rememberMe : userDetails.rememberMe
+      username: userDetails.username,
+      email: userDetails.email,
+      password: userDetails.password,
     }
-    
-    const token = Cookies.set("user_token", user.userName, { expires : 7 });
-    
+
     try {
-      const response = await axios.post(apiUrl, user, { headers : { Authorization : `Bearer ${token}` }});
+      const response = await axios.post(apiUrl, user);
       const responseData = response.data;
 
       if (responseData && responseData.success) {
@@ -105,39 +132,57 @@ export default function Login() {
           {/* Input Fields */}
           <div className="grid gap-y-3">
             {/* User Name */}
-            <div className="relative">
-              <input
-                type="text"
-                onChange={(event) => [...userDetails, setUserDetails({ userName : event.target.value })]}
-                placeholder="Your username"
-                className="w-full px-14 py-4 bg-fields focus:outline-primary rounded-[16px]"
-              />
-              {/* Icon */}
-              <HiUser className="absolute inset-0 my-auto mx-5 h-6 w-6" />
+            <div>
+              <div className="relative">
+                <input
+                  type="text"
+                  onChange={(event) => setUserDetails((user) => ({ ...user, username: event.target.value }))}
+                  placeholder="Your username"
+                  className="w-full px-14 py-4 bg-fields focus:outline-primary rounded-[16px]"
+                />
+                {/* Icon */}
+                <HiUser className="absolute inset-0 my-auto mx-5 h-6 w-6" />
+              </div>
+              {/* Validation Statement */}
+              {errors.username && <div className=" text-red-700 text-sm mt-2">
+                <p>{errors.username}</p>
+              </div>}
             </div>
 
             {/* Email */}
-            <div className="relative">
-              <input
-                type="email"
-                onChange={(event) => [...userDetails, setUserDetails({ email : event.target.value })]}
-                placeholder="Your email"
-                className="w-full px-14 py-4 bg-fields focus:outline-primary rounded-[16px]"
-              />
-              {/* Icon */}
-              <HiMail className="absolute inset-0 my-auto mx-5 h-6 w-6" />
+            <div>
+              <div className="relative">
+                <input
+                  type="email"
+                  onChange={(event) => setUserDetails((user) => ({ ...user, email: event.target.value }))}
+                  placeholder="Your email"
+                  className="w-full px-14 py-4 bg-fields focus:outline-primary rounded-[16px]"
+                />
+                {/* Icon */}
+                <HiMail className="absolute inset-0 my-auto mx-5 h-6 w-6" />
+              </div>
+              {/* Validation Statement */}
+              {errors.email && <div className=" text-red-700 text-sm mt-2">
+                <p>{errors.email}</p>
+              </div>}
             </div>
 
             {/* Password */}
-            <div className="relative">
-              <input
-                type="password"
-                onChange={(event) => [...userDetails, setUserDetails({ password : event.target.value })]}
-                placeholder="Enter password"
-                className="w-full px-14 py-4 bg-fields focus:outline-primary rounded-[16px]"
-              />
-              {/* Icon */}
-              <HiLockClosed className="absolute inset-0 my-auto mx-5 h-6 w-6" />
+            <div>
+              <div className="relative">
+                <input
+                  type="password"
+                  onChange={(event) => setUserDetails((user) => ({ ...user, password: event.target.value }))}
+                  placeholder="Enter password"
+                  className="w-full px-14 py-4 bg-fields focus:outline-primary rounded-[16px]"
+                />
+                {/* Icon */}
+                <HiLockClosed className="absolute inset-0 my-auto mx-5 h-6 w-6" />
+              </div>
+              {/* Validation Statement */}
+              {errors.password && <div className=" text-red-700 text-sm mt-2">
+                <p>{errors.password}</p>
+              </div>}
             </div>
 
             {/* User Controls */}
