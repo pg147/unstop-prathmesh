@@ -39,31 +39,40 @@ export default function Login() {
   });
 
   const validate = () => {
+    let isValid = true;
+
+    // Initializing empty error object
     const newErrors = {};
 
     // Username Validation
     if (userDetails.username !== "emilys") {
       newErrors.username = "Your username must be emilys!";
+      isValid = false;
     };
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(userDetails.email)) {
       newErrors.email = "Invalid email format.";
+      isValid = false;
     }
 
     // Password Validation
     if (userDetails.password.length < 8) {
       newErrors.password = "Your password length must be equal to or greater than 8";
+      isValid = false;
     }
 
+    // Setting errors
     setErrors(newErrors);
 
-    return newErrors.length === 0 ? true : false;
+    return isValid; // True - (passed) and False - (failed)
   }
 
   const login = async () => {
-    if (!validate()) return;
+    if (!validate()) {
+      return;
+    }
 
     // User Credentials
     const user = {
@@ -71,6 +80,9 @@ export default function Login() {
       email: userDetails.email,
       password: userDetails.password,
     }
+
+    // Setting data in Local Storage
+    localStorage.setItem("user", JSON.stringify(user));
 
     try {
       const response = await axios.post(apiUrl, user);
@@ -144,7 +156,7 @@ export default function Login() {
                 <HiUser className="absolute inset-0 my-auto mx-5 h-6 w-6" />
               </div>
               {/* Validation Statement */}
-              {errors.username && <div className=" text-red-700 text-sm mt-2">
+              {errors.username && <div className=" text-red-700 text-sm my-2">
                 <p>{errors.username}</p>
               </div>}
             </div>
@@ -162,7 +174,7 @@ export default function Login() {
                 <HiMail className="absolute inset-0 my-auto mx-5 h-6 w-6" />
               </div>
               {/* Validation Statement */}
-              {errors.email && <div className=" text-red-700 text-sm mt-2">
+              {errors.email && <div className=" text-red-700 text-sm my-2">
                 <p>{errors.email}</p>
               </div>}
             </div>
@@ -210,7 +222,7 @@ export default function Login() {
             </button>
 
             {/* Sign up */}
-            <p className="text-sm font-medium text-center mt-4">Don&apos;t have an account? <span className="text-primary hover:underline cursor-pointer">Register</span></p>
+            <p className="text-sm font-medium text-center mt-2">Don&apos;t have an account? <span className="text-primary hover:underline cursor-pointer">Register</span></p>
           </div>
         </div>
       </div>
