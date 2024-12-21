@@ -119,7 +119,7 @@ export default function Login() {
         </div>
 
         {/* Right Container - Login Form */}
-        <div className="h-screen lg:h-fit w-full lg:max-w-[600px] p-5 lg:p-6 lg:rounded-[16px] shadow-intense bg-white">
+        <div className="h-fit w-full lg:max-w-[600px] p-5 lg:p-6 lg:rounded-[16px] shadow-intense bg-white">
           <h1 className="font-medium text-2xl">Welcome to {""}<span className="font-bold text-primary">Unstop</span></h1>
 
           {/* Auth Options */}
