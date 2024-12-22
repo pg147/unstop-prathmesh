@@ -106,7 +106,7 @@ export default function Login() {
   }
 
   return (
-    <div className="flex h-screen w-full bg-outline">
+    <div className="flex h-screen w-full lg:bg-outline">
       <div className="w-full xl:px-12 2xl:px-36 lg:flex items-center justify-around lg:mx-auto">
         {/* Left Container - Asset */}
         <div className="h-fit w-fit">
@@ -119,7 +119,7 @@ export default function Login() {
         </div>
 
         {/* Right Container - Login Form */}
-        <div className="h-fit w-full lg:max-w-[600px] p-5 lg:p-6 lg:rounded-[16px] shadow-intense bg-white">
+        <div className="h-screen lg:h-fit w-full lg:max-w-[600px] p-5 lg:p-6 lg:rounded-[16px] lg:shadow-intense bg-white">
           <h1 className="font-medium text-2xl">Welcome to {""}<span className="font-bold text-primary">Unstop</span></h1>
 
           {/* Auth Options */}
